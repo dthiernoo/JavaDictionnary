@@ -25,7 +25,6 @@ public class RechercheMot {
             String line; ArrayList<String> reference = new ArrayList<>();
 
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 String[] ref = line.split(",");
                 if (ref[0].equalsIgnoreCase(motInconnu)) {
                     for (String str: ref) {
@@ -40,7 +39,7 @@ public class RechercheMot {
     private String concatDefinition(ArrayList<String> reference) {
         int count = 3;
         String concat = "";
-        
+
         try {
             while (reference.get(count) != null) {
                 concat += reference.get(count) + ",";

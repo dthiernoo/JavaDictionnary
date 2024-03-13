@@ -8,9 +8,6 @@ class Main {
 
         RechercheMot rechercheMot = new RechercheMot("Alcarraza", "dictionnary.csv");
 
-        // for (String str: rechercheMot.getDictionnaryReference()) {
-        //     System.out.println(str);
-        // }
         System.out.println(rechercheMot);
     }
 
