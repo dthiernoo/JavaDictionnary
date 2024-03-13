@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class RechercheMot {
-    private String nameInconnu;
+    private String motIconnu;
     private ArrayList<String> dictionnaryReference;
 
     RechercheMot(String motInconnu, String dictionnaire) {
-        this.nameInconnu = motInconnu;
+        this.motIconnu = motInconnu;
 
         try {
             this.dictionnaryReference = getReference(motInconnu, dictionnaire);
@@ -25,6 +25,7 @@ public class RechercheMot {
             String line; ArrayList<String> reference = new ArrayList<>();
 
             while ((line = reader.readLine()) != null) {
+                System.out.println(line);
                 String[] ref = line.split(",");
                 if (ref[0].equalsIgnoreCase(motInconnu)) {
                     for (String str: ref) {
@@ -32,12 +33,27 @@ public class RechercheMot {
                     } reader.close(); return reference;
                 }
             }
-
+            
             reader.close(); return reference;
     }
 
-    public String getNameInconnu() {
-        return this.nameInconnu;
+    private String concatDefinition(ArrayList<String> reference) {
+        int count = 3;
+        String concat = "";
+        
+        try {
+            while (reference.get(count) != null) {
+                concat += reference.get(count) + ",";
+                reference.remove(count);
+            } 
+        } catch (IndexOutOfBoundsException e) {}
+        
+        concat = concat.substring(0, concat.length()-1);
+        reference.add(concat); return concat;
+    }
+
+    public String getmotIconnu() {
+        return this.motIconnu;
     }
 
     public ArrayList<String> getDictionnaryReference() {
@@ -46,6 +62,7 @@ public class RechercheMot {
 
     @Override
     public String toString() {
-        return "Reference(mot="+this.nameInconnu+", traduction="+this.dictionnaryReference.get(1)+", type="+this.dictionnaryReference.get(2)+", definition="+this.dictionnaryReference.get(3)+")";
+        concatDefinition(dictionnaryReference);
+        return "Reference(mot="+this.motIconnu+", traduction="+this.dictionnaryReference.get(1)+", type="+this.dictionnaryReference.get(2)+", definition="+this.dictionnaryReference.get(3)+")";
     }
 }
