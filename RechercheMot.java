@@ -7,12 +7,13 @@ import java.util.ArrayList;
 public class RechercheMot {
     private String motIconnu;
     private ArrayList<String> dictionnaryReference;
+    static ArrayList<ArrayList<String>> historique = new ArrayList<>();
 
     RechercheMot(String motInconnu, String dictionnaire) {
         this.motIconnu = motInconnu;
-
         try {
             this.dictionnaryReference = getReference(motInconnu, dictionnaire);
+            historique.add(this.dictionnaryReference);
         } catch (FileNotFoundException e) {
             System.out.println("\\u001B[31mErreur: Aucun dictionnaire trouver.\\u001B[0m");
         } catch (IOException e) {
@@ -51,12 +52,19 @@ public class RechercheMot {
         reference.add(concat); return concat;
     }
 
+
+
+    
     public String getmotIconnu() {
         return this.motIconnu;
     }
 
     public ArrayList<String> getDictionnaryReference() {
         return this.dictionnaryReference;
+    }
+
+    public ArrayList<ArrayList<String>> getHistorique() {
+        return historique;
     }
 
     @Override

@@ -4,11 +4,14 @@ import java.util.Scanner;
 class Main {
     public static void main(String[] args) {
         // int choixMenu = afficheMenu();
-        // System.out.println(choixMenu);
+
 
         RechercheMot rechercheMot = new RechercheMot("Alcarraza", "dictionnary.csv");
-
+        RechercheMot rechercheMot2 = new RechercheMot("Alcoholometry", "dictionnary.csv");
         System.out.println(rechercheMot);
+        System.out.println(rechercheMot2);
+        System.out.println(RechercheMot.historique);
+
     }
 
     /**
