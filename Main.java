@@ -3,8 +3,15 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-        int choixMenu = afficheMenu();
-        System.out.println(choixMenu);
+        // int choixMenu = afficheMenu();
+        // System.out.println(choixMenu);
+
+        RechercheMot rechercheMot = new RechercheMot("Alcarraza", "dictionnary.csv");
+
+        // for (String str: rechercheMot.getDictionnaryReference()) {
+        //     System.out.println(str);
+        // }
+        System.out.println(rechercheMot);
     }
 
     /**
@@ -25,7 +32,6 @@ class Main {
         do {
             if (count == 0) count++;
             else System.out.println("\u001B[31mErreur: Veuillez entrer un nombre entre 1 et 3.\u001B[0m\n");
-            
             try {
                 System.out.print("Entrer un numero: ");
                 number = scanner.nextInt();
