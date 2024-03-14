@@ -4,7 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-abstract public class DictionnaryReference {
+abstract public class DictionnaryReference implements Reference {
     private String motInconnu;
     private ArrayList<String> dictionnaryReference;
 
@@ -13,23 +13,40 @@ abstract public class DictionnaryReference {
         this.dictionnaryReference = setDictionnaryReference(dictionnaire);
     }
 
-    private String concatDefinition(ArrayList<String> reference) {
-        int count = 3;
-        String concat = "";
-
+    private ArrayList<String> setDictionnaryReference(String dictionnaire) {
+        ArrayList<String> ref = new ArrayList<>();
         try {
-            while (reference.get(count) != null) {
-                concat += reference.get(count) + ",";
-                reference.remove(count);
-            } 
-        } catch (IndexOutOfBoundsException e) {}
-        
-        concat = concat.substring(0, concat.length()-1);
-        reference.add(concat); return concat;
+            ref = getReference(motInconnu, dictionnaire);
+        } catch (FileNotFoundException e) {
+            System.out.println("\\u001B[31mErreur: Aucun dictionnaire trouver.\\u001B[0m");
+        } catch (IOException e) {
+            System.out.println("\\u001B[31mErreur: Entrée/Sortie.\\u001B[0m");
+        } return ref;
+    }
+
+    private ArrayList<String> getReference(String motInconnu, String dictionnaire) throws FileNotFoundException, IOException{
+        BufferedReader reader = new BufferedReader(new FileReader(dictionnaire));
+        String line; ArrayList<String> reference = new ArrayList<>();
+
+        while ((line = reader.readLine()) != null) {
+            String[] ref = line.split(",");
+            if (ref[0].equalsIgnoreCase(motInconnu)) {
+                for (String str: ref) {
+                    reference.add(str);
+                } reader.close(); return reference;
+            }
+        }
+
+        /* Si on est dans cette section ca veut dire que on a pas trouver de reference */
+        ArrayList<String> occurences = recherchePrefixe(motInconnu, dictionnaire);
+        if (occurences.size() > 0) { /* .get(0) != null */
+            reader.close(); System.out.println(occurences);
+        }
+
+        reader.close(); return reference;
     }
 
     ArrayList<String> recherchePrefixe(String motInconnu, String dictionnaire) {
-        
         int compteur = motInconnu.length();
 
         for (int i = 1; i < compteur; i++) {
@@ -57,54 +74,65 @@ abstract public class DictionnaryReference {
 
         return mots; /* Return array null or array words potential */
     }
-/* Setters */
-    private ArrayList<String> setDictionnaryReference(String dictionnaire) {
-        ArrayList<String> ref = new ArrayList<>();
+
+    private String concatDefinition(ArrayList<String> reference) {
+        int count = 3;
+        String concat = "";
+
         try {
-            ref = getReference(motInconnu, dictionnaire);
-        } catch (FileNotFoundException e) {
-            System.out.println("\\u001B[31mErreur: Aucun dictionnaire trouver.\\u001B[0m");
-        } catch (IOException e) {
-            System.out.println("\\u001B[31mErreur: Entrée/Sortie.\\u001B[0m");
-        } return ref;
+            while (reference.get(count) != null) {
+                concat += reference.get(count) + ",";
+                reference.remove(count);
+            } 
+        } catch (IndexOutOfBoundsException e) {}
+        
+        concat = concat.substring(0, concat.length()-1);
+
+        if (true) reference.add(concat); 
+        
+        return concat;
     }
 
-/* Getters */
+    private String concatDefinition(ArrayList<String> reference,  boolean updateRef) {
+        int count = 3;
+        String concat = "";
+
+        try {
+            while (reference.get(count) != null) {
+                concat += reference.get(count) + ",";
+                reference.remove(count);
+            } 
+        } catch (IndexOutOfBoundsException e) {}
+        
+        concat = concat.substring(0, concat.length()-1);
+
+        if (updateRef) reference.add(concat); 
+        
+        return concat;
+    }
+
+    /* Getters */
     public String getMotInconnu() {
         return this.motInconnu;
-    }
-
-    public ArrayList<String> getDictionnaryReference() {
-        return this.dictionnaryReference;
     }
 
     public String getTraduction() {
         return this.dictionnaryReference.get(1);
     }
 
-    private ArrayList<String> getReference(String motInconnu, String dictionnaire) throws FileNotFoundException, IOException{
-        BufferedReader reader = new BufferedReader(new FileReader(dictionnaire));
-        String line; ArrayList<String> reference = new ArrayList<>();
+    public String getType() {
+        return concatDefinition(this.dictionnaryReference, false);
+    }
 
-        while ((line = reader.readLine()) != null) {
-            String[] ref = line.split(",");
-            if (ref[0].equalsIgnoreCase(motInconnu)) {
-                for (String str: ref) {
-                    reference.add(str);
-                } reader.close(); return reference;
-            }
-        }
+    public String getDefinition() {
+        concatDefinition(this.dictionnaryReference);
+        return this.dictionnaryReference.get(3);
+    }
 
-        /* Si on est dans cette section ca veut dire que on a pas trouver de reference */
-        ArrayList<String> occurences = recherchePrefixe(motInconnu, dictionnaire);
-        if (occurences.get(0) != null) {
-            reader.close(); System.out.println(occurences);
-        }
+    public ArrayList<String> getDictionnaryReference() {
+        return this.dictionnaryReference;
+    }
 
-        reader.close(); return reference;
-}
-    
-/* toString */
     @Override
     public String toString() {
         concatDefinition(dictionnaryReference);

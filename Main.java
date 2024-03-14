@@ -9,7 +9,9 @@ class Main {
         RechercheMot rechercheMot = new RechercheMot("Alcarraza", "dictionnary.csv");
         RechercheMot rechercheMot2 = new RechercheMot("Alacarraza", "dictionnary.csv");
 
+        // System.out.println(rechercheMot2.getDictionnaryReference());
         System.out.println(rechercheMot2.getDictionnaryReference());
+        // System.out.println(rechercheMot);
     }
 
     /**
