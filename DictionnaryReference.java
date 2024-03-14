@@ -28,6 +28,35 @@ abstract public class DictionnaryReference {
         reference.add(concat); return concat;
     }
 
+    ArrayList<String> recherchePrefixe(String motInconnu, String dictionnaire) {
+        
+        int compteur = motInconnu.length();
+
+        for (int i = 1; i < compteur; i++) {
+            String sub = motInconnu.substring(0, compteur - i);
+            try {
+                ArrayList<String> occurences = trouverOccurence(sub, dictionnaire);
+                if (occurences.size() > 0) return occurences;
+            } catch (IOException e) {}
+        }
+
+        return new ArrayList<>();
+    }
+
+    ArrayList<String> trouverOccurence(String motInconnu, String dictionnaire) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(dictionnaire));
+        String line; motInconnu = motInconnu.toLowerCase();
+        ArrayList<String> mots = new ArrayList<>();
+
+        while ((line = reader.readLine()) != null) {
+            String[] ref = line.split(",");
+            if (ref[0].toLowerCase().startsWith(motInconnu)) {
+                mots.add(ref[0]);
+            } 
+        } reader.close();
+
+        return mots; /* Return array null or array words potential */
+    }
 /* Setters */
     private ArrayList<String> setDictionnaryReference(String dictionnaire) {
         ArrayList<String> ref = new ArrayList<>();
@@ -41,7 +70,7 @@ abstract public class DictionnaryReference {
     }
 
 /* Getters */
-    public String getmotIconnu() {
+    public String getMotInconnu() {
         return this.motInconnu;
     }
 
@@ -65,7 +94,13 @@ abstract public class DictionnaryReference {
                 } reader.close(); return reference;
             }
         }
-        
+
+        /* Si on est dans cette section ca veut dire que on a pas trouver de reference */
+        ArrayList<String> occurences = recherchePrefixe(motInconnu, dictionnaire);
+        if (occurences.get(0) != null) {
+            reader.close(); System.out.println(occurences);
+        }
+
         reader.close(); return reference;
 }
     
@@ -73,6 +108,6 @@ abstract public class DictionnaryReference {
     @Override
     public String toString() {
         concatDefinition(dictionnaryReference);
-        return "Reference(mot="+this.getmotIconnu()+", traduction="+this.dictionnaryReference.get(1)+", type="+this.dictionnaryReference.get(2)+", definition="+this.dictionnaryReference.get(3)+")";
+        return "Reference(mot="+this.getMotInconnu()+", traduction="+this.dictionnaryReference.get(1)+", type="+this.dictionnaryReference.get(2)+", definition="+this.dictionnaryReference.get(3)+")";
     }
 }
