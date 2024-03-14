@@ -6,11 +6,12 @@ class Main {
         // int choixMenu = afficheMenu();
 
 
-        RechercheMot rechercheMot = new RechercheMot("Alcarraza", "dictionnary.csv");
-        RechercheMot rechercheMot2 = new RechercheMot("Alacarraza", "dictionnary.csv");
+        Mot rechercheMot = new Mot("Alcarraza", "dictionnary.csv");
+        Mot rechercheMot2 = new Mot("Alacarraza", "dictionnary.csv");
 
         // System.out.println(rechercheMot2.getDictionnaryReference());
         System.out.println(rechercheMot2.getDictionnaryReference());
+        System.out.println(Mot.historique);
         // System.out.println(rechercheMot);
     }
 

@@ -6,21 +6,35 @@ import java.util.ArrayList;
 
 abstract public class DictionnaryReference implements Reference {
     private String motInconnu;
-    private ArrayList<String> dictionnaryReference;
+    private String dictionnaire;
+    private ArrayList<String> dictionnaryReference = new ArrayList<>();
+
 
     DictionnaryReference(String motInconnu, String dictionnaire) {
         this.motInconnu = motInconnu;
-        this.dictionnaryReference = setDictionnaryReference(dictionnaire);
+        this.dictionnaire = dictionnaire;
+
+        try {
+            this.dictionnaryReference = setDictionnaryReference(dictionnaire);
+            
+        } catch (Exception e) {
+            this.dictionnaryReference.add("Aucune référence trouver pour " + this.motInconnu + "dans " + this.dictionnaire);
+            System.out.println(e.getMessage());
+        }
     }
 
-    private ArrayList<String> setDictionnaryReference(String dictionnaire) {
+    private ArrayList<String> setDictionnaryReference(String dictionnaire) throws Exception {
         ArrayList<String> ref = new ArrayList<>();
         try {
             ref = getReference(motInconnu, dictionnaire);
+            if (ref.getLast().equalsIgnoreCase("Type-recherche-prefixe")) {
+                ref.removeLast();
+                throw new Exception("\u001B[31mErreur: Mot pas trouver. Peut etre vous vouliez dire:\u001B[0m " + ref);
+            }
         } catch (FileNotFoundException e) {
-            System.out.println("\\u001B[31mErreur: Aucun dictionnaire trouver.\\u001B[0m");
+            System.out.println("\u001B[31mErreur: Aucun dictionnaire trouver.\u001B[0m");
         } catch (IOException e) {
-            System.out.println("\\u001B[31mErreur: Entrée/Sortie.\\u001B[0m");
+            System.out.println("\u001B[31mErreur: Entrée/Sortie.\u001B[0m");
         } return ref;
     }
 
@@ -40,7 +54,10 @@ abstract public class DictionnaryReference implements Reference {
         /* Si on est dans cette section ca veut dire que on a pas trouver de reference */
         ArrayList<String> occurences = recherchePrefixe(motInconnu, dictionnaire);
         if (occurences.size() > 0) { /* .get(0) != null */
-            reader.close(); System.out.println(occurences);
+            occurences.add("Type-recherche-prefixe");
+            reader.close(); 
+            // System.out.println(occurences); 
+            return occurences;
         }
 
         reader.close(); return reference;
@@ -88,9 +105,7 @@ abstract public class DictionnaryReference implements Reference {
         
         concat = concat.substring(0, concat.length()-1);
 
-        if (true) reference.add(concat); 
-        
-        return concat;
+        reference.add(concat); return concat;
     }
 
     private String concatDefinition(ArrayList<String> reference,  boolean updateRef) {
@@ -117,16 +132,20 @@ abstract public class DictionnaryReference implements Reference {
     }
 
     public String getTraduction() {
-        return this.dictionnaryReference.get(1);
+        if (this.dictionnaryReference.size() > 1) return this.dictionnaryReference.get(1);
+        return "Aucune traduction trouver pour ce mot dans " + this.dictionnaire;
     }
 
     public String getType() {
-        return concatDefinition(this.dictionnaryReference, false);
+        if (this.dictionnaryReference.size() > 1) return concatDefinition(this.dictionnaryReference, false);
+        return "Aucun type trouver pour ce mot dans " + this.dictionnaire;
     }
 
     public String getDefinition() {
-        concatDefinition(this.dictionnaryReference);
-        return this.dictionnaryReference.get(3);
+        if (this.dictionnaryReference.size() > 1) {
+            concatDefinition(this.dictionnaryReference);
+            return this.dictionnaryReference.get(3);
+        } return "Aucune définition trouver pour ce mot dans " + this.dictionnaire;
     }
 
     public ArrayList<String> getDictionnaryReference() {
@@ -135,7 +154,9 @@ abstract public class DictionnaryReference implements Reference {
 
     @Override
     public String toString() {
-        concatDefinition(dictionnaryReference);
-        return "Reference(mot="+this.getMotInconnu()+", traduction="+this.dictionnaryReference.get(1)+", type="+this.dictionnaryReference.get(2)+", definition="+this.dictionnaryReference.get(3)+")";
+        if (this.dictionnaryReference.size() > 1) {
+            concatDefinition(dictionnaryReference);
+            return "Reference(mot="+this.getMotInconnu()+", traduction="+this.dictionnaryReference.get(1)+", type="+this.dictionnaryReference.get(2)+", definition="+this.dictionnaryReference.get(3)+")";
+        } return this.getDictionnaryReference().get(0);
     }
 }
