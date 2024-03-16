@@ -4,7 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-abstract public class DictionnaryReference implements Reference {
+public class DictionnaryReference implements Reference {
     private String motInconnu;
     private String dictionnaire;
     private ArrayList<String> dictionnaryReference = new ArrayList<>();

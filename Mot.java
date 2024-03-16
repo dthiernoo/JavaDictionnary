@@ -11,7 +11,7 @@ public class Mot extends DictionnaryReference {
      */
 
     /** Historique des recherches effectuées. */
-    static ArrayList<ArrayList<String>> historique = new ArrayList<>();
+    static ArrayList<DictionnaryReference> historique = new ArrayList<>();
 
     /**
      * Constructeur de la classe Mot.
@@ -22,7 +22,7 @@ public class Mot extends DictionnaryReference {
      */
     Mot(String motInconnu, String dictionnaire) {
         super(motInconnu, dictionnaire);
-        historique.add(super.getDictionnaryReference());
+        historique.add(new DictionnaryReference(motInconnu, dictionnaire));
     }
 
     /**
@@ -30,7 +30,7 @@ public class Mot extends DictionnaryReference {
      *
      * @return L'historique des recherches.
      */
-    public ArrayList<ArrayList<String>> getHistorique() {
+    public ArrayList<DictionnaryReference> getHistorique() {
         return historique;
     }       
 }
