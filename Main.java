@@ -8,10 +8,14 @@ class Main {
 
         Mot rechercheMot = new Mot("Alcarraza", "dictionnary.csv");
         Mot rechercheMot2 = new Mot("Alacarraza", "dictionnary.csv");
+        Mot rechercheMot3 = new Mot("Abdominous", "dictionnary.csv");
+        Mot rechercheMot4 = new Mot("Abdominous", "dictionnary.csv");
 
         // System.out.println(rechercheMot2.getDictionnaryReference());
-        System.out.println(rechercheMot2.getDictionnaryReference());
-        System.out.println(Mot.historique);
+        // System.out.println(rechercheMot2.getReference());
+        System.out.println( rechercheMot.getHistorique() );
+        System.out.println( rechercheMot2.getHistorique() );
+        System.out.println( rechercheMot3.getHistorique() );
         // System.out.println(rechercheMot);
     }
 
