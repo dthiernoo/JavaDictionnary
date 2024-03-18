@@ -4,10 +4,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DictionnaryReference implements Reference {
+abstract public class DictionnaryReference extends Reference {
     private String motInconnu;
     private String dictionnaire;
-    private ArrayList<String> dictionnaryReference = new ArrayList<>();
+
 
 
     DictionnaryReference(String motInconnu, String dictionnaire) {
@@ -15,21 +15,37 @@ public class DictionnaryReference implements Reference {
         this.dictionnaire = dictionnaire;
 
         try {
-            this.dictionnaryReference = setDictionnaryReference(dictionnaire);
-            
+            /* Si le mot a deja ete chercher, chercher la reference du
+             * mot dans l'historique sinon rechercher la reference dans
+             * le dictionnaire.
+             */
+            ArrayList<String> motRef = super.rechercherHistorique(motInconnu);
+            if (motRef.size() == 4) {
+                super.reference = motRef;
+            } else {
+                super.reference = setDictionnaryReference(dictionnaire);
+                super.setHistorique(reference);
+            }
         } catch (Exception e) {
-            this.dictionnaryReference.add("Aucune référence trouver pour " + this.motInconnu + "dans " + this.dictionnaire);
+            String message = "Aucune référence trouver pour " + this.motInconnu + "dans " + this.dictionnaire;
+            super.reference.add(message); super.setHistorique(message);
             System.out.println(e.getMessage());
         }
+    }
+    
+
+    DictionnaryReference(String motInconnu, String dictionnaire, ArrayList<String> dictionnaryReference) {
+        this.motInconnu = motInconnu;
+        this.dictionnaire = dictionnaire;
+        super.reference = dictionnaryReference;
     }
 
     private ArrayList<String> setDictionnaryReference(String dictionnaire) throws Exception {
         ArrayList<String> ref = new ArrayList<>();
         try {
-            ref = getReference(motInconnu, dictionnaire);
+            ref = trouverDictionnaryReference(motInconnu, dictionnaire);
             if (ref.getLast().equalsIgnoreCase("Type-recherche-prefixe")) {
-                ref.removeLast();
-                throw new Exception("\u001B[31mErreur: Mot pas trouver. Peut etre vous vouliez dire:\u001B[0m " + ref);
+                ref.removeLast(); throw new Exception("\u001B[31mErreur: Mot pas trouver. Peut etre vous vouliez dire:\u001B[0m " + ref);
             }
         } catch (FileNotFoundException e) {
             System.out.println("\u001B[31mErreur: Aucun dictionnaire trouver.\u001B[0m");
@@ -38,7 +54,7 @@ public class DictionnaryReference implements Reference {
         } return ref;
     }
 
-    private ArrayList<String> getReference(String motInconnu, String dictionnaire) throws FileNotFoundException, IOException{
+    private ArrayList<String> trouverDictionnaryReference(String motInconnu, String dictionnaire) throws FileNotFoundException, IOException{
         BufferedReader reader = new BufferedReader(new FileReader(dictionnaire));
         String line; ArrayList<String> reference = new ArrayList<>();
 
@@ -92,71 +108,30 @@ public class DictionnaryReference implements Reference {
         return mots; /* Return array null or array words potential */
     }
 
-    private String concatDefinition(ArrayList<String> reference) {
-        int count = 3;
-        String concat = "";
-
-        try {
-            while (reference.get(count) != null) {
-                concat += reference.get(count) + ",";
-                reference.remove(count);
-            } 
-        } catch (IndexOutOfBoundsException e) {}
-        
-        concat = concat.substring(0, concat.length()-1);
-
-        reference.add(concat); return concat;
-    }
-
-    private String concatDefinition(ArrayList<String> reference,  boolean updateRef) {
-        int count = 3;
-        String concat = "";
-
-        try {
-            while (reference.get(count) != null) {
-                concat += reference.get(count) + ",";
-                reference.remove(count);
-            } 
-        } catch (IndexOutOfBoundsException e) {}
-        
-        concat = concat.substring(0, concat.length()-1);
-
-        if (updateRef) reference.add(concat); 
-        
-        return concat;
-    }
 
     /* Getters */
+    @Override
     public String getMotInconnu() {
         return this.motInconnu;
     }
 
+    @Override
     public String getTraduction() {
-        if (this.dictionnaryReference.size() > 1) return this.dictionnaryReference.get(1);
+        if (super.reference.size() > 1) return super.reference.get(1);
         return "Aucune traduction trouver pour ce mot dans " + this.dictionnaire;
     }
 
+    @Override
     public String getType() {
-        if (this.dictionnaryReference.size() > 1) return concatDefinition(this.dictionnaryReference, false);
+        if (super.reference.size() > 1) return super.concatDefinition(super.reference, false);
         return "Aucun type trouver pour ce mot dans " + this.dictionnaire;
     }
 
-    public String getDefinition() {
-        if (this.dictionnaryReference.size() > 1) {
-            concatDefinition(this.dictionnaryReference);
-            return this.dictionnaryReference.get(3);
-        } return "Aucune définition trouver pour ce mot dans " + this.dictionnaire;
-    }
-
-    public ArrayList<String> getDictionnaryReference() {
-        return this.dictionnaryReference;
-    }
-
     @Override
-    public String toString() {
-        if (this.dictionnaryReference.size() > 1) {
-            concatDefinition(dictionnaryReference);
-            return "Reference(mot="+this.getMotInconnu()+", traduction="+this.dictionnaryReference.get(1)+", type="+this.dictionnaryReference.get(2)+", definition="+this.dictionnaryReference.get(3)+")";
-        } return this.getDictionnaryReference().get(0);
+    public String getDefinition() {
+        if (super.reference.size() > 1) {
+            super.concatDefinition(super.reference);
+            return super.reference.get(3);
+        } return "Aucune définition trouver pour ce mot dans " + this.dictionnaire;
     }
 }
