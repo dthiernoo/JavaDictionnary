@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * Mot étend DictionnaryReference et gère l'historique des recherches effectuées.
  */
