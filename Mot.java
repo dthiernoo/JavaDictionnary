@@ -2,12 +2,6 @@
  * Mot étend DictionnaryReference et gère l'historique des recherches effectuées.
  */
 public class Mot extends DictionnaryReference {
-    /*
-     * TODO: Si le mot a deja ete chercher dans le dictionnaire => directement 
-     * prendre la definition du mot dans l'historique, ce qui permet d'améliorer
-     * la performance.
-     */
-
     /** Historique des recherches effectuées. */
     
     /**
