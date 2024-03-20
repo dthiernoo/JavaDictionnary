@@ -2,7 +2,6 @@
  * Mot étend DictionnaryReference et gère l'historique des recherches effectuées.
  */
 public class Mot extends DictionnaryReference {
-    /** Historique des recherches effectuées. */
     
     /**
      * Constructeur de la classe Mot.
