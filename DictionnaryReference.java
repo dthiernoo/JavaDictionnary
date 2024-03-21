@@ -8,8 +8,6 @@ abstract public class DictionnaryReference extends Reference {
     private String motInconnu;
     private String dictionnaire;
 
-
-
     DictionnaryReference(String motInconnu, String dictionnaire) {
         this.motInconnu = motInconnu;
         this.dictionnaire = dictionnaire;
@@ -69,11 +67,9 @@ abstract public class DictionnaryReference extends Reference {
 
         /* Si on est dans cette section ca veut dire que on a pas trouver de reference */
         ArrayList<String> occurences = recherchePrefixe(motInconnu, dictionnaire);
-        if (occurences.size() > 0) { /* .get(0) != null */
+        if (occurences.size() > 0) {
             occurences.add("Type-recherche-prefixe");
-            reader.close(); 
-            // System.out.println(occurences); 
-            return occurences;
+            reader.close(); return occurences;
         }
 
         reader.close(); return reference;
