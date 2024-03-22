@@ -119,15 +119,15 @@ abstract public class DictionnaryReference extends Reference {
 
     @Override
     public String getType() {
-        if (super.reference.size() > 1) return super.concatDefinition(super.reference, false);
+        if (super.reference.size() > 1) return super.reference.get(2);
         return "Aucun type trouver pour ce mot dans " + this.dictionnaire;
     }
 
     @Override
     public String getDefinition() {
         if (super.reference.size() > 1) {
-            super.concatDefinition(super.reference);
-            return super.reference.get(3);
+            
+            return super.concatDefinition(super.reference, false);
         } return "Aucune définition trouver pour ce mot dans " + this.dictionnaire;
     }
 }

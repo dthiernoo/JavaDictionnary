@@ -3,20 +3,26 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-        // int choixMenu = afficheMenu();
 
+        do {
+            int choixMenu = afficheMenu();
+            Scanner scanner = new Scanner(System.in); // Alcarraza
+        
+            if (choixMenu == 1) {
+                System.out.print("Entrer le mot à chercher: "); String inconnu = scanner.nextLine();
+                Mot mot = new Mot(inconnu, "dictionnary.csv");
 
-        Mot rechercheMot = new Mot("Alcarraza", "dictionnary.csv");
-        Mot rechercheMot2 = new Mot("Alacarraza", "dictionnary.csv");
-        Mot rechercheMot3 = new Mot("Abdominous", "dictionnary.csv");
-        Mot rechercheMot4 = new Mot("Abdominous", "dictionnary.csv");
-
-        // System.out.println(rechercheMot2.getDictionnaryReference());
-        // System.out.println(rechercheMot2.getReference());
-        System.out.println( rechercheMot.getHistorique() );
-        System.out.println( rechercheMot2.getHistorique() );
-        System.out.println( rechercheMot3.getHistorique() );
-        // System.out.println(rechercheMot);
+                /* Format pour le mot trouver */
+                System.out.println(" \n\u001B[34m" + mot.getMotInconnu());
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+");
+                System.out.println("+     Traduction: " + mot.getTraduction());
+                System.out.println("+     Type: " + mot.getType());
+                System.out.println("+     Définition: " + mot.getDefinition());
+                System.out.println("+\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\u001B[0m\n");
+                
+            }
+        } while (true);
+        
     }
 
     /**
@@ -46,7 +52,6 @@ class Main {
             }
         } while (number > 3 || number < 1);
 
-        scanner.close();
         return number;
     }
 }
