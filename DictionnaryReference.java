@@ -13,7 +13,8 @@ abstract public class DictionnaryReference extends Reference {
         this.dictionnaire = dictionnaire;
 
         try {
-            /* Si le mot a deja ete chercher, chercher la reference du
+            /* 
+             * Si le mot a deja ete chercher, chercher la reference du
              * mot dans l'historique sinon rechercher la reference dans
              * le dictionnaire.
              */
@@ -22,7 +23,7 @@ abstract public class DictionnaryReference extends Reference {
                 super.reference = motRef;
             } else {
                 super.reference = setDictionnaryReference(dictionnaire);
-                super.setHistorique(reference);
+                historique.add(super.reference);
             }
         } catch (Exception e) {
             String message = "Aucune référence trouver pour " + this.motInconnu + "dans " + this.dictionnaire;
@@ -43,12 +44,12 @@ abstract public class DictionnaryReference extends Reference {
         try {
             ref = trouverDictionnaryReference(motInconnu, dictionnaire);
             if (ref.getLast().equalsIgnoreCase("Type-recherche-prefixe")) {
-                ref.removeLast(); throw new Exception("\u001B[31mErreur: Mot pas trouver. Peut etre vous vouliez dire:\u001B[0m " + ref);
+                ref.removeLast(); throw new Exception("Erreur: Mot pas trouver. Peut etre vous vouliez dire:" + ref);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("\u001B[31mErreur: Aucun dictionnaire trouver.\u001B[0m");
+            System.out.println("Erreur: Aucun dictionnaire trouver.");
         } catch (IOException e) {
-            System.out.println("\u001B[31mErreur: Entrée/Sortie.\u001B[0m");
+            System.out.println("Erreur: Entrée/Sortie.");
         } return ref;
     }
 
@@ -127,7 +128,7 @@ abstract public class DictionnaryReference extends Reference {
     public String getDefinition() {
         if (super.reference.size() > 1) {
             
-            return super.concatDefinition(super.reference, false);
+            return super.concatDefinition(super.reference, true);
         } return "Aucune définition trouver pour ce mot dans " + this.dictionnaire;
     }
 }

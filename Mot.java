@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -15,14 +16,39 @@ public class Mot extends DictionnaryReference {
      */
     Mot(String motInconnu, String dictionnaire) {
         super(motInconnu, dictionnaire);
-        
+    }
+
+    public static void afficherMenuRechercher(Mot mot) {
+        /* Format pour le mot trouver */
+        System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+");
+        System.out.println("+     Mot: " + mot.getMotInconnu());
+        System.out.println("+     Traduction: " + mot.getTraduction());
+        System.out.println("+     Type: " + mot.getType());
+        System.out.println("+     Définition: " + mot.getDefinition());
+        System.out.println("+\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    }
+
+    public static void afficherMenuHistorique() {
+        System.out.println("\nHistorique");
+        for (ArrayList<String> mot: Mot.historique) {
+            try {
+                System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+");
+                System.out.println("+     Mot: " + mot.get(0));
+                System.out.println("+     Traduction: " + mot.get(1));
+                System.out.println("+     Type: " + mot.get(2));
+                System.out.println("+     Définition: " + mot.get(3));
+                System.out.println("+\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("+\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            }
+        }
     }
 
     /**
      * Affiche le menu et demande à l'utilisateur de sélectionner une action.
      * @return Le numéro de l'action sélectionnée par l'utilisateur.
      */
-    static int afficheMenu() {
+    public static int afficheMenu() {
         /* Affichage du menu sur la console */
         System.out.println("\n\nSelectionez votre action:\n");
         System.out.println("  1) Rechercher le mot");
@@ -35,22 +61,16 @@ public class Mot extends DictionnaryReference {
 
         do {
             if (count == 0) count++;
-            else System.out.println("\u001B[31mErreur: Veuillez entrer un nombre entre 1 et 3.\u001B[0m\n");
+            else System.out.println("Erreur: Veuillez entrer un nombre entre 1 et 3.\n");
             try {
                 System.out.print("Entrer un numero: ");
                 number = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("\u001B[31mErreur: Veuillez entrer un nombre valide.\u001B[0m\n");
+                System.out.println("Erreur: Veuillez entrer un nombre valide.\n");
                 scanner.nextLine(); count = 0;
             }
         } while (number > 3 || number < 1);
 
-        scanner.close();
         return number;
     }
-
-    public static void main(String[] args) {
-        
-    }
- 
 }

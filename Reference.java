@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
-abstract public class Reference implements Historique {
+abstract public class Reference {
     abstract public String getMotInconnu();
     abstract public String getTraduction();
     abstract public String getType();
     abstract public String getDefinition();
     
     protected ArrayList<String> reference = new ArrayList<>();
-    private static ArrayList<ArrayList<String>> historique = new ArrayList<>();
+    static ArrayList<ArrayList<String>> historique = new ArrayList<>();
 
     public ArrayList<String> rechercherHistorique(String motInconnu) {
         for (ArrayList<String> motRef: historique) {
@@ -17,7 +17,7 @@ abstract public class Reference implements Historique {
         } return this.reference;
     }
 
-    public ArrayList<ArrayList<String>> getHistorique() {
+    public static ArrayList<ArrayList<String>> getHistorique() {
         return historique;
     }
 
@@ -31,21 +31,7 @@ abstract public class Reference implements Historique {
         historique.add(ref);
     }
 
-    protected String concatDefinition(ArrayList<String> reference) {
-        int count = 3;
-        String concat = "";
 
-        try {
-            while (reference.get(count) != null) {
-                concat += reference.get(count) + ",";
-                reference.remove(count);
-            } 
-        } catch (IndexOutOfBoundsException e) {}
-        
-        concat = concat.substring(0, concat.length()-1);
-
-        reference.add(concat); return concat;
-    }
 
     protected String concatDefinition(ArrayList<String> reference,  boolean updateRef) {
         int count = 3;
@@ -72,7 +58,7 @@ abstract public class Reference implements Historique {
     @Override
     public String toString() {
         if (this.reference.size() > 1) {
-            this.concatDefinition(this.reference);
+            this.concatDefinition(this.reference, true);
             return "Reference(mot="+this.getMotInconnu()+", traduction="+this.reference.get(1)+", type="+this.reference.get(2)+", definition="+this.reference.get(3)+")";
         } return this.getReference().get(0);
     }
