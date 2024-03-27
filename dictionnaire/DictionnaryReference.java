@@ -5,42 +5,54 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-abstract public class DictionnaryReference extends Reference {
+/**
+ * La classe DictionnaryReference fournit des fonctionnalités pour rechercher des mots dans un dictionnaire
+ * et récupérer leurs références, y compris la traduction, le type et la définition.
+ * Elle hérite de la classe Reference pour utiliser ses fonctionnalités de gestion d'historique.
+ * 
+ * @see Reference
+*/
+public class DictionnaryReference extends Reference {
     private String motInconnu;
     private String dictionnaire;
 
-    DictionnaryReference(String motInconnu, String dictionnaire) {
+    /**
+     * Constructeur de la classe DictionnaryReference.
+     * Recherche le mot inconnu dans le dictionnaire et initialise ses références.
+     * Si le mot est déjà recherché, récupère ses références depuis l'historique.
+     * Cela permet de reduire le coût de l'algorithmique.
+     * 
+     * @param motInconnu Le mot inconnu à rechercher.
+     * @param dictionnaire Le chemin vers le fichier CSV contenant le dictionnaire.
+    */
+    public DictionnaryReference(String motInconnu, String dictionnaire) {
         this.motInconnu = motInconnu;
         this.dictionnaire = dictionnaire;
 
         try {
-            /* 
-             * Si le mot a deja ete chercher, chercher la reference du
-             * mot dans l'historique sinon rechercher la reference dans
-             * le dictionnaire.
-             */
             ArrayList<String> motRef = super.rechercherHistorique(motInconnu);
             if (motRef.size() == 4) {
                 super.reference = motRef;
             } else {
                 super.reference = setDictionnaryReference(dictionnaire);
-                historique.add(super.reference);
+                super.setHistorique(super.reference);
             }
         } catch (Exception e) {
             String message = "Aucune référence trouver pour " + this.motInconnu + "dans " + this.dictionnaire;
-            super.reference.add(message); super.setHistorique(message);
+            super.reference.add(message); 
+            super.setHistorique(message);
             System.out.println(e.getMessage());
         }
     }
-    
 
-    DictionnaryReference(String motInconnu, String dictionnaire, ArrayList<String> dictionnaryReference) {
-        this.motInconnu = motInconnu;
-        this.dictionnaire = dictionnaire;
-        super.reference = dictionnaryReference;
-    }
-
-    private ArrayList<String> setDictionnaryReference(String dictionnaire) throws Exception {
+    /**
+     * Récupère la référence du mot dans le dictionnaire.
+     * 
+     * @param dictionnaire Le chemin vers le fichier CSV contenant le dictionnaire.
+     * @return La référence du mot dans le dictionnaire.
+     * @throws Exception Si une erreur survient lors de la recherche dans le dictionnaire.
+    */
+    public ArrayList<String> setDictionnaryReference(String dictionnaire) throws Exception {
         ArrayList<String> ref = new ArrayList<>();
         try {
             ref = trouverDictionnaryReference(motInconnu, dictionnaire);
@@ -54,7 +66,16 @@ abstract public class DictionnaryReference extends Reference {
         } return ref;
     }
 
-    private ArrayList<String> trouverDictionnaryReference(String motInconnu, String dictionnaire) throws FileNotFoundException, IOException{
+    /**
+     * Recherche la référence du mot dans le dictionnaire.
+     * 
+     * @param motInconnu Le mot inconnu à rechercher.
+     * @param dictionnaire Le chemin vers le fichier CSV contenant le dictionnaire.
+     * @return La référence du mot dans le dictionnaire.
+     * @throws FileNotFoundException Si le fichier du dictionnaire n'est pas trouvé.
+     * @throws IOException Si une erreur d'entrée/sortie se produit lors de la lecture du dictionnaire.
+    */
+    public ArrayList<String> trouverDictionnaryReference(String motInconnu, String dictionnaire) throws FileNotFoundException, IOException{
         BufferedReader reader = new BufferedReader(new FileReader(dictionnaire));
         String line; ArrayList<String> reference = new ArrayList<>();
 
@@ -67,7 +88,7 @@ abstract public class DictionnaryReference extends Reference {
             }
         }
 
-        /* Si on est dans cette section ca veut dire que on a pas trouver de reference */
+        // Si l'on se trouve dans cette section, cela signifie qu'on a pas trouver de reference.
         ArrayList<String> occurences = recherchePrefixe(motInconnu, dictionnaire);
         if (occurences.size() > 0) {
             occurences.add("Type-recherche-prefixe");
@@ -77,7 +98,14 @@ abstract public class DictionnaryReference extends Reference {
         reader.close(); return reference;
     }
 
-    ArrayList<String> recherchePrefixe(String motInconnu, String dictionnaire) {
+    /**
+     * Recherche des mots similaires commençant par le même préfixe.
+     * 
+     * @param motInconnu Le mot inconnu pour lequel rechercher des mots similaires.
+     * @param dictionnaire Le chemin vers le fichier CSV contenant le dictionnaire.
+     * @return Une liste de mots similaires trouvés.
+    */
+    public ArrayList<String> recherchePrefixe(String motInconnu, String dictionnaire) {
         int compteur = motInconnu.length();
 
         for (int i = 1; i < compteur; i++) {
@@ -86,12 +114,40 @@ abstract public class DictionnaryReference extends Reference {
                 ArrayList<String> occurences = trouverOccurence(sub, dictionnaire);
                 if (occurences.size() > 0) return occurences;
             } catch (IOException e) {}
+        } 
+        
+        return new ArrayList<>();
+    }
+
+    /**
+     * Recherche les mots commençant par le préfixe du mot inconnu.
+     * 
+     * @see testprefix.Main
+     * @return Les mots similaires trouvés dans le dictionnaire.
+    */
+    public ArrayList<String> recherchePrefixe() {
+        int compteur = this.motInconnu.length();
+
+        for (int i = 1; i < compteur; i++) {
+            String sub = this.motInconnu.substring(0, compteur - i);
+            try {
+                ArrayList<String> occurences = trouverOccurence(sub, this.dictionnaire);
+                if (occurences.size() > 0) return occurences;
+            } catch (IOException e) {}
         }
 
         return new ArrayList<>();
     }
 
-    ArrayList<String> trouverOccurence(String motInconnu, String dictionnaire) throws IOException {
+    /**
+     * Recherche tous les mots dont la sous-chaîne de longueur maximale depuis le début du mot inconnu, est présente dans le dictionnaire.
+     * 
+     * @param motInconnu Le préfixe pour lequel rechercher des occurrences.
+     * @param dictionnaire Le chemin vers le fichier CSV contenant le dictionnaire.
+     * @return Une liste de mots trouvés commençant par le préfixe donné.
+     * @throws IOException Si une erreur d'entrée/sortie se produit lors de la lecture du dictionnaire.
+    */
+    public ArrayList<String> trouverOccurence(String motInconnu, String dictionnaire) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(dictionnaire));
         String line; motInconnu = motInconnu.toLowerCase();
         ArrayList<String> mots = new ArrayList<>();
@@ -103,11 +159,9 @@ abstract public class DictionnaryReference extends Reference {
             } 
         } reader.close();
 
-        return mots; /* Return array null or array words potential */
+        return mots;
     }
 
-
-    /* Getters */
     @Override
     public String getMotInconnu() {
         return this.motInconnu;
@@ -128,7 +182,6 @@ abstract public class DictionnaryReference extends Reference {
     @Override
     public String getDefinition() {
         if (super.reference.size() > 1) {
-            
             return super.concatDefinition(super.reference, true);
         } return "Aucune définition trouver pour ce mot dans " + this.dictionnaire;
     }

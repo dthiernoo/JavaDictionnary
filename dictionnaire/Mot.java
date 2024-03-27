@@ -4,8 +4,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Mot étend DictionnaryReference et gère l'historique des recherches effectuées.
- */
+ * La classe Mot représente un mot du dictionnaire avec ses informations associées.
+ * Elle hérite de la classe DictionnaryReference pour accéder aux fonctionnalités de recherche.
+*/
 public class Mot extends DictionnaryReference {
     
     /**
@@ -14,13 +15,17 @@ public class Mot extends DictionnaryReference {
      * 
      * @param motInconnu Le mot inconnu à rechercher.
      * @param dictionnaire Le dictionnaire dans lequel effectuer la recherche.
-     */
+    */
     Mot(String motInconnu, String dictionnaire) {
         super(motInconnu, dictionnaire);
     }
 
+    /**
+     * Affiche les détails du mot recherché.
+     * 
+     * @param mot Le mot recherché.
+    */
     public static void afficherMenuRechercher(Mot mot) {
-        /* Format pour le mot trouver */
         System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
         System.out.println("Mot: " + mot.getMotInconnu() + "\n");
         System.out.println("Traduction: " + mot.getTraduction() + "\n");
@@ -29,9 +34,12 @@ public class Mot extends DictionnaryReference {
         System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
     }
 
+    /**
+     * Affiche l'historique des recherches de mots effectuées par l'utilisateur.
+    */
     public static void afficherMenuHistorique() {
         System.out.println("\nHistorique");
-        for (ArrayList<String> mot: Mot.historique) {
+        for (ArrayList<String> mot: Mot.getHistorique()) {
             try {
                 System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
                 System.out.println("Mot: " + mot.get(0) + "\n");
@@ -48,7 +56,7 @@ public class Mot extends DictionnaryReference {
     /**
      * Affiche le menu et demande à l'utilisateur de sélectionner une action.
      * @return Le numéro de l'action sélectionnée par l'utilisateur.
-     */
+    */
     public static int afficheMenu() {
         /* Affichage du menu sur la console */
         System.out.println("\n\nSelectionez votre action:\n");
@@ -63,6 +71,7 @@ public class Mot extends DictionnaryReference {
         do {
             if (count == 0) count++;
             else System.out.println("Erreur: Veuillez entrer un nombre entre 1 et 3.\n");
+
             try {
                 System.out.print("Entrer un numero: ");
                 number = scanner.nextInt();
@@ -70,6 +79,7 @@ public class Mot extends DictionnaryReference {
                 System.out.println("Erreur: Veuillez entrer un nombre valide.\n");
                 scanner.nextLine(); count = 0;
             }
+
         } while (number > 3 || number < 1);
 
         return number;
