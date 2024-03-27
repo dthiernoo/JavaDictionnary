@@ -20,26 +20,26 @@ public class Mot extends DictionnaryReference {
 
     public static void afficherMenuRechercher(Mot mot) {
         /* Format pour le mot trouver */
-        System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+");
-        System.out.println("+     Mot: " + mot.getMotInconnu());
-        System.out.println("+     Traduction: " + mot.getTraduction());
-        System.out.println("+     Type: " + mot.getType());
-        System.out.println("+     Définition: " + mot.getDefinition());
-        System.out.println("+\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+        System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+        System.out.println("Mot: " + mot.getMotInconnu() + "\n");
+        System.out.println("Traduction: " + mot.getTraduction() + "\n");
+        System.out.println("Type: " + mot.getType() + "\n");
+        System.out.println("Définition: " + mot.getDefinition());
+        System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
     }
 
     public static void afficherMenuHistorique() {
         System.out.println("\nHistorique");
         for (ArrayList<String> mot: Mot.historique) {
             try {
-                System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+");
-                System.out.println("+     Mot: " + mot.get(0));
-                System.out.println("+     Traduction: " + mot.get(1));
-                System.out.println("+     Type: " + mot.get(2));
-                System.out.println("+     Définition: " + mot.get(3));
-                System.out.println("+\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+                System.out.println("Mot: " + mot.get(0) + "\n");
+                System.out.println("Traduction: " + mot.get(1) + "\n");
+                System.out.println("Type: " + mot.get(2) + "\n");
+                System.out.println("Définition: " + mot.get(3));
+                System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("+\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             }
         }
     }
