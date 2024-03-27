@@ -1,3 +1,4 @@
+package dictionnaire;
 import java.util.ArrayList;
 
 public class Historique {

@@ -1,3 +1,4 @@
+package dictionnaire;
 import java.util.ArrayList;
 
 abstract public class Reference {
